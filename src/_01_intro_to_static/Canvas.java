@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
-public class Canvas {
+public static class Canvas {
     static int WIDTH = 1200;
     static int HEIGHT = 800;
 
