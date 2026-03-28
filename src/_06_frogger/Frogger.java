@@ -1,29 +1,53 @@
 package _06_frogger;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Frogger extends PApplet {
 	static final int WIDTH = 600;
 	static final int HEIGHT = 400;
 
 	int x = 400;
-	int y = 550;
+	int y = 549;
+	PImage back;
+	 PImage carLeft;
+	 PImage carRight;
+	 PImage frog;
 	int hopDistance = 0;
 	Car car1, car2, car3, car4;
-
+	boolean intersects(Car car) {
+		if(y+25< car.getY()||
+		y-25>car.getY()+ 50 ||
+		x+25 < car.getX() ||
+		x-25 > car.getX()+ car.getSize()
+	) { return false;
+	}
+		else {
+			return true;
+		}
+		
+		
+	}
+	
 	public void settings(){
 		size(800, 600);
 	}
 
 	public void setup(){
-		car1 =  new Car(0, 300, 20, 100);
-		car2 =  new Car(700, 100, 20, 100);
-		car3 =  new Car(0, 500, 20, 100);
-		car4 =  new Car(700, 400, 20, 100);
+		 back = loadImage("src/_06_frogger/froggerBackground.png");
+		 back.resize(800, 600);
+		 carLeft = loadImage("src/_06_frogger/carLeft.png");
+		 carLeft.resize(100, 50);
+		 carRight = loadImage("src/_06_frogger/carRight.png");
+	        carRight.resize(100, 50);
+		car1 =  new Car(0, 301, 20, 100, false);
+		car2 =  new Car(700, 102, 20, 100, true);
+		car3 =  new Car(0, 498, 20, 100, false);
+		car4 =  new Car(700, 402, 20, 100, true);
 	}
 
 	public void draw(){
-		background(0, 0, 255);
+		background(back);
 		fill(0, 255, 0);
 		ellipse(x, y, 50, 50);
 		inside();
@@ -35,8 +59,29 @@ public class Frogger extends PApplet {
 		car3.speedLeft();
 		car2.speedRight();
 		car4.speedRight();
+		boolean cross = intersects(car1);
+		if(cross == true) {
+			x = 400;
+			y = 550;
+		}
+		 cross = intersects(car2);
+		if(cross == true) {
+			x = 400;
+			y = 550;
+		}
+		cross = intersects(car3);
+		if(cross == true) {
+			x = 400;
+			y = 550;
+		}
+		 cross = intersects(car4);
+		if(cross == true) {
+			x = 400;
+			y = 550;
+		}
 	}
-	public void keyPressed()
+	
+	public void keyReleased()
 	{
 		if(key == CODED){
 			if(keyCode == UP)
@@ -72,16 +117,31 @@ public class Frogger extends PApplet {
 		}
 	}
 	class Car{
+		boolean right;
+		
 		int x;
 		int y;
 		int speed;
 		int size;
-		
-		
+		int getSize() {
+			return size;
+		}
+		int getX() {
+			return x;
+		}
+		int getY() {
+			return y;
+		}
 		void display()
 		  {
 		    fill(0,255,0);
-		    rect(x , y,  size, 50);
+		   
+		    if(right == true ) {
+		    	image(carRight, x, y);
+		    }
+		    else {
+		    	image(carLeft, x, y);
+		    }
 		  }
 		
 		public void speedLeft() {
@@ -96,12 +156,12 @@ public class Frogger extends PApplet {
 				x = 0;
 			}
 		}
-		public Car(int x, int y, int speed, int size) {
+		public Car(int x, int y, int speed, int size, boolean right) {
 			this.x = x;
 			this.y =y;
 			this.speed = speed;
 			this.size = size;
-			
+			this.right = right;
 		}
 	}
 	static public void main(String[] args) {
